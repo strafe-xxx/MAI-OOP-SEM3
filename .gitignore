@@ -14,3 +14,4 @@ lab_1_exe
 liblab_1_lib.a
 tests
 lib
+.vscode
