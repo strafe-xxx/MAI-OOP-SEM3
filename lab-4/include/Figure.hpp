@@ -49,6 +49,6 @@ public:
     friend std::istream &operator>>(std::istream &in, Figure<U> &figure);
 };
 
-#include "Figure.tpp"
+#include "Figure.cpp"
 
 #endif // FIGURE_HPP

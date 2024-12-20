@@ -20,6 +20,6 @@ public:
     friend std::istream &operator>>(std::istream &in, Rectangle<U> &rectangle);
 };
 
-#include "Rectangle.tpp"
+#include "Rectangle.cpp"
 
 #endif // RECTANGLE_HPP

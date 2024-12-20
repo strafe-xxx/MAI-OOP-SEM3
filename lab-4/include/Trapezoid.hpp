@@ -21,6 +21,6 @@ public:
     friend std::istream &operator>>(std::istream &in, Trapeze<U> &trapeze);
 };
 
-#include "Trapezoid.tpp"
+#include "Trapezoid.cpp"
 
 #endif // TRAPEZE_HPP

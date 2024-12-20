@@ -32,6 +32,6 @@ public:
     friend std::ostream &operator<<(std::ostream &os, const Point<U> &point);
 };
 
-#include "Point.tpp"
+#include "Point.cpp"
 
 #endif // POINT_HPP

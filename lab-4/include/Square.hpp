@@ -20,6 +20,6 @@ public:
     friend std::istream &operator>>(std::istream &in, Square<U> &square);
 };
 
-#include "Square.tpp"
+#include "Square.cpp"
 
 #endif // SQUARE_HPP
