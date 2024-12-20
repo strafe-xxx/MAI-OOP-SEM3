@@ -1,47 +1,47 @@
 cmake_minimum_required(VERSION 3.10)
-
-project(Lab6Project)
+project(Lab_6)
 
 set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# Добавление опций компиляции
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Werror=maybe-uninitialized")
 
+# Установка Google Test через FetchContent
 include(FetchContent)
-
 FetchContent_Declare(
   googletest
-  URL https://github.com/google/googletest/archive/refs/tags/release-1.12.1.zip
+  GIT_REPOSITORY https://github.com/google/googletest.git
+  GIT_TAG v1.15.2
+  TLS_VERIFY false
 )
-
+# For Windows: Prevent overriding the parent project's compiler/linker settings
 set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
 FetchContent_MakeAvailable(googletest)
 
+# Подключение всех файлов в src и include
+file(GLOB_RECURSE SOURCES src/*.cpp)
+file(GLOB_RECURSE HEADERS include/*.h)
+
+# Главный исполняемый файл
+add_executable(${CMAKE_PROJECT_NAME}.exe main.cpp ${SOURCES} ${HEADERS})
+
+# Линковка библиотеки к главному файлу
+target_sources(${CMAKE_PROJECT_NAME}.exe PRIVATE ${HEADERS})
+
+# Добавление тестов
 enable_testing()
 
-set(SOURCES
-    src/bear.cpp
-    src/elf.cpp
-    src/npc.cpp
-    src/rogue.cpp
-)
+# tests - команда в терминал для запуска тестов, а далее имя файла и папки  
+add_executable(tests tests/tests.cpp ${SOURCES} ${HEADERS})
 
-set(HEADERS
-    include/bear.hpp
-    include/elf.hpp
-    include/npc.hpp
-    include/rogue.hpp
-    include/factory.hpp
-    include/observer.hpp
-    include/visitor.hpp
-)
+# Линковка с Google Test
+target_link_libraries(tests PRIVATE gtest_main)
 
-add_executable(main_lab6 src/main.cpp ${SOURCES})
-target_include_directories(main_lab6 PRIVATE include)
-target_link_libraries(main_lab6 pthread)
+# Добавление тестов в тестовый набор
+add_test(NAME Lab_6_Tests COMMAND tests)
 
-add_executable(tests_lab6 tests/tests.cpp ${SOURCES})
-target_include_directories(tests_lab6 PRIVATE include)
-target_link_libraries(tests_lab6 gtest_main pthread)
-
-include(GoogleTest)
-gtest_discover_tests(tests_lab6)
+# cmake ..
+# make
+# ./tests
+# ./Lab_6.exe

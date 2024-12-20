@@ -1,91 +1,27 @@
-#pragma once
-#include "Npc.hpp"
+#ifndef VISITOR_HPP
+#define VISITOR_HPP
+
+#include "Robber.hpp"
+#include "Orc.hpp"
+#include "Werewolf.hpp"
 
 class Visitor {
 public:
-    virtual bool visit(const std::shared_ptr<NPC>&) const = 0;
+    virtual void visitRobber(Robber& robber, NPC& other) = 0;
+    virtual void visitOrc(Orc& orc, NPC& other) = 0;
+    virtual void visitWerewolf(Werewolf& werewolf, NPC& other) = 0;
+    virtual ~Visitor() = default;
 };
 
-class ElfVisitor final : public Visitor {
+class BattleVisitor : public Visitor {
 public:
-    bool visit(const std::shared_ptr<NPC>& npc) const override {
-        bool result{};
-        switch (npc->get_type()) {
-            case NpcType::ElfType:
-                result = false;
-                break;
+    BattleVisitor(float range);
+    void visitRobber(Robber& robber, NPC& other) override;
+    void visitOrc(Orc& orc, NPC& other) override;
+    void visitWerewolf(Werewolf& werewolf, NPC& other) override;
 
-            case NpcType::BearType:
-                result = false;
-                break;
-
-            case NpcType::RogueType:
-                result = true;
-                break;
-        }
-        return result;
-    }
+private:
+    float combatRange;
 };
 
-class BearVisitor final : public Visitor {
-    bool visit(const std::shared_ptr<NPC>& npc) const override {
-        bool result{};
-        switch (npc->get_type()) {
-            case NpcType::ElfType:
-                result = true;
-                break;
-
-            case NpcType::BearType:
-                result = false;
-                break;
-
-            case NpcType::RogueType:
-                result = false;
-                break;
-        }
-        return result;
-    }
-};
-
-class RogueVisitor final : public Visitor {
-    bool visit(const std::shared_ptr<NPC>& npc) const override {
-        bool result{};
-        switch (npc->get_type()) {
-            case NpcType::ElfType:
-                result = false;
-                break;
-
-            case NpcType::BearType:
-                result = false;
-                break;
-
-            case NpcType::RogueType:
-                result = true;
-                break;
-        }
-        return result;
-    }
-};
-
-class VisitorFactory {
-public:
-    static std::shared_ptr<Visitor> CreateVisitor(const NpcType& type) {
-        std::shared_ptr<Visitor> result;
-        switch (type) {
-            case NpcType::ElfType:
-                result = std::static_pointer_cast<Visitor>(std::make_shared<ElfVisitor>());
-                break;
-
-            case NpcType::BearType:
-                result = std::static_pointer_cast<Visitor>(std::make_shared<BearVisitor>());
-                break;
-
-            case NpcType::RogueType:
-                result = std::static_pointer_cast<Visitor>(std::make_shared<RogueVisitor>());
-                break;
-            default:
-                break;
-        }
-        return result;
-    }
-};
+#endif

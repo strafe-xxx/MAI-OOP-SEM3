@@ -1,43 +1,30 @@
-#pragma once
-#include "Npc.hpp"
+#ifndef OBSERVER_HPP
+#define OBSERVER_HPP
 
-// Text Observer
-class TextObserver final : public Observer {
-private:
-    TextObserver(){};
+#include <string>
+#include <iostream>
+#include <fstream>
 
+class Observer {
 public:
-    static std::shared_ptr<Observer> get() {
-        static TextObserver instance;
-        return std::shared_ptr<Observer>(&instance, [](Observer*) {});
-    }
-
-    void on_fight(const std::shared_ptr<NPC> attacker, const std::shared_ptr<NPC> defender, bool win) override {
-        if (win) {
-            std::cout << std::endl << "Murder --------" << std::endl;
-            std::cout << "killer: ";
-            attacker->print();
-            std::cout << "victim: ";
-            defender->print();
-        }
-    }
+    virtual void update(const std::string& event) = 0;
+    virtual ~Observer() = default;
 };
 
-class FileObserver final : public Observer {
-private:
-    FileObserver(){};
-
+class ConsoleObserver : public Observer {
 public:
-    static std::shared_ptr<Observer> get() {
-        static FileObserver instance;
-        return std::shared_ptr<Observer>(&instance, [](Observer*) {});
-    }
-
-    void on_fight(const std::shared_ptr<NPC> attacker, const std::shared_ptr<NPC> defender, bool win) override {
-        if (win) {
-            std::ofstream fs("log.txt", std::ios::app);
-            fs << std::endl << "Murder --------" << std::endl << "killer: " << *attacker << std::endl << "victim: " << *defender;
-            fs.close();
-        }
-    }
+    void update(const std::string& event) override;
 };
+
+class FileObserver : public Observer {
+public:
+    FileObserver(const std::string& filename);
+    ~FileObserver();
+
+    void update(const std::string& event) override;
+
+private:
+    std::ofstream logFile_;
+};
+
+#endif
