@@ -1,5 +1,5 @@
 #include <iostream>
-#include "bitstring.hpp"
+#include "../include/bitstring.hpp"
 
 int main()
 {

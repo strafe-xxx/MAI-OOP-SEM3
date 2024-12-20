@@ -1,3 +1,4 @@
+#include <../include/bitstring.hpp>
 #include <string>
 #include <cstring>
 #include <stdexcept>
